@@ -34,3 +34,5 @@ def read(nom_fichier) :
 
 
 parser = argparse.ArgumentParser(description="Gestionnaire de tâches")
+subparsers = parser.add_subparsers(dest='command')
+parser_add = subparsers.add_parser('add', help="Ajouter une tâche")
