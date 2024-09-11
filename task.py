@@ -49,11 +49,14 @@ def get_id(nom_fichier) :
 
 def read(nom_fichier) : 
     liste=[]
-    with open(nom_fichier, "r") as f:
+    try:
+        with open(nom_fichier, "r") as f:
             lines = f.readlines()
             for line in lines :
                  liste.append(line.strip().split(","))
-    return liste
+        return liste
+    except :
+        return []
 
 
 parser = argparse.ArgumentParser(description="Gestionnaire de tâches")
