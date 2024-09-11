@@ -31,8 +31,19 @@ def read(nom_fichier) :
             lines = f.readlines()
             for line in lines :
                  liste.append(line.strip().split(","))
+    return liste
 
 
 parser = argparse.ArgumentParser(description="Gestionnaire de tâches")
 subparsers = parser.add_subparsers(dest='command')
+
 parser_add = subparsers.add_parser('add', help="Ajouter une tâche")
+parser_add.add_argument('nom_fichier', help="Nom du fichier")
+parser_add.add_argument('description', help="Description")
+
+args= parser.parse_args()
+if args.command == 'add':
+     add(args.nom_fichier, args.description)
+     # python3 task.py add lestaches.txt "Faire la vaisselle" pour l'éxecution dans le terminal
+else:
+     parser.print_help()
