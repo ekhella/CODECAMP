@@ -25,7 +25,7 @@ def modify(nom_fichier, id, nouvelle_description):
 def rm(nom_fichier, id):
     tasks = read(nom_fichier)
     tasks = [task for task in tasks if task[0]!= id]
-    tasks = [(task[0]-1 if task [0]> id else task[0], task[1]) for task in tasks]
+    tasks = [(int(task[0])-1 if task [0]> id else task[0], task[1]) for task in tasks]
     with open(nom_fichier, 'w') as f:
         for task in tasks:
             f.write(f"{task[0]},{task[1]}\n")
@@ -37,7 +37,7 @@ def show(nom_fichier):
     print("| id  | description     |")
     print("+-----+----------------+")
     for task in tasks:
-        print(f"| {task[0]:<5}| {task[1]:<16} |")
+        print(f"| {task[0]:<4}| {task[1]:<15} |")
     print("+-----+----------------+")
 
 
@@ -78,7 +78,7 @@ parser_show.add_argument('nom_fichier', help="Nom du fichier")
 args= parser.parse_args()
 if args.command == 'add':
      add(args.nom_fichier, args.description)
-     # python3 task.py add lestaches.txt "Faire la vaisselle" pour l'éxecution dans le terminal
+     # python3 task.py add lestaches.txt "Faire la vaisselle"
 elif args.command == 'modify':
      modify(args.nom_fichier, args.id, args.nouvelle_desc)
      #python3 task.py modify lestaches.txt 3 "Faire le ménage"
