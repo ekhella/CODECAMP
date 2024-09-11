@@ -6,7 +6,7 @@ def add(nom_fichier, description):
     """
     id = get_id(nom_fichier)
     with open(nom_fichier, 'a') as f:
-        f.write(f"{id} {description}\n")
+        f.write(f"{id},{description}\n")
     return id
 
 def modify(nom_fichier, id, nouvelle_description):

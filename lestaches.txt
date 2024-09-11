@@ -1,2 +1,2 @@
-1, <Ceci est une tache>1 Faire la vaisselle
-1 Faire la vaisselle
+1,Faire la vaisselle
+2,Faire la vaisselle
