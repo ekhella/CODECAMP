@@ -1,4 +1,13 @@
 import argparse
+from datetime import datetime
+
+def log_action(action, nom_fichier, details):
+    """
+    Enregistre l'action dans le fichier journal avec l'heure, l'action exécutée, et les détails du résultat.
+    """
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    with open('journal.txt', 'a') as f:
+        f.write(f"[{timestamp}] Action: {action} | Fichier: {nom_fichier} | Détails: {details}\n")
 
 def add_etiq(nom_fichier, id, nouvelles_etiquettes):
     """
@@ -20,6 +29,7 @@ def add_etiq(nom_fichier, id, nouvelles_etiquettes):
                 f.write(f"{task[0]},{task[1]},{task[2]}\n")
     if not found:
         print(f"Erreur : tâche {id} non trouvée.")
+    log_action('add', nom_fichier, f"Etiquette ajoutée: {id}, {task[1]}, {etiquettes_finales}")
 
 
 def rm_etiq(nom_fichier, id, etiquettes_a_supprimer):
@@ -39,6 +49,7 @@ def rm_etiq(nom_fichier, id, etiquettes_a_supprimer):
                 f.write(f"{task[0]},{task[1]},{task[2]}\n")
     if not found:
         print(f"Erreur : tâche {id} non trouvée.")
+    log_action('add', nom_fichier, f"Etiquette supprimée: {id}, {task[1]}, {etiquettes_a_supprimer}")
 
 
 def modif_etiq(nom_fichier, id, ancienne_etiquette, nouvelle_etiquette):
@@ -58,7 +69,7 @@ def modif_etiq(nom_fichier, id, ancienne_etiquette, nouvelle_etiquette):
                 f.write(f"{task[0]},{task[1]},{task[2]}\n")
     if not found:
         print(f"Erreur : tâche {id} non trouvée.")
-
+    log_action('add', nom_fichier, f"Etiquette modifiée: {id}, {task[1]}, {etiquettes_finales}")
 
 
 def add(nom_fichier, description, etiquette):
@@ -74,7 +85,9 @@ def add(nom_fichier, description, etiquette):
     with open(nom_fichier, 'a') as f:
         f.write(f"{id},{description},{etiquette}\n")
 
+    log_action('add', nom_fichier, f"Tâche ajoutée: {id}, {description}, {etiquette}")
     return id
+    
 
 
 def modify(nom_fichier, id, nouvelle_description, nouvelle_etiquette):
@@ -89,6 +102,7 @@ def modify(nom_fichier, id, nouvelle_description, nouvelle_etiquette):
                 f.write(f"{task[0]},{task[1]},{task[2]} \n")
     if not found:
         print(f"Erreur : tâche {id} non trouvée.")
+    log_action('add', nom_fichier, f"Tâche modifiée: {id}, {task[1]}, {nouvelle_etiquette}")
 
 def rm(nom_fichier, id):
     tasks = read(nom_fichier)
@@ -97,6 +111,7 @@ def rm(nom_fichier, id):
     with open(nom_fichier, 'w') as f:
         for task in tasks:
             f.write(f"{task[0]},{task[1]},{task[2]} \n")
+    log_action('add', nom_fichier, f"Tâche supprimée: {id}, {task[1]}, {task[2]}")
     return tasks
 
 def show(nom_fichier):
@@ -123,6 +138,7 @@ def show(nom_fichier):
 
     # Imprimer la ligne de fin de tableau
     print(f"+{'-' * (max_id_length + 2)}+{'-' * (max_desc_length + 2)}+{'-' * (max_etiquette_length + 2)}+")
+    log_action('add', nom_fichier, f"Show tableau")
 
 
 
