@@ -33,12 +33,30 @@ def rm(nom_fichier, id):
 
 def show(nom_fichier):
     tasks = read(nom_fichier)
-    print("+-----+----------------+------------+")
-    print("| id  | description     | etiquette     |")
-    print("+-----+----------------+------------+")
+
+    # Calculer la longueur maximale pour chaque colonne
+    max_id_length = max(len(task[0]) for task in tasks)  # Longueur max de l'id
+    max_desc_length = max(len(task[1]) for task in tasks)  # Longueur max de la description
+    max_etiquette_length = max(len(task[2]) for task in tasks)  # Longueur max de l'étiquette
+
+    # Ajouter des longueurs minimales pour l'esthétique
+    max_id_length = max(max_id_length, 2)
+    max_desc_length = max(max_desc_length, 11)
+    max_etiquette_length = max(max_etiquette_length, 9)
+
+    # Imprimer l'en-tête avec les longueurs calculées
+    print(f"+{'-' * (max_id_length + 2)}+{'-' * (max_desc_length + 2)}+{'-' * (max_etiquette_length + 2)}+")
+    print(f"| {'id':<{max_id_length}} | {'description':<{max_desc_length}} | {'etiquette':<{max_etiquette_length}} |")
+    print(f"+{'-' * (max_id_length + 2)}+{'-' * (max_desc_length + 2)}+{'-' * (max_etiquette_length + 2)}+")
+
+    # Imprimer les lignes pour chaque tâche
     for task in tasks:
-        print(f"| {task[0]:<4}| {task[1]:<15} |{task[2]:<15} |")
-    print("+-----+----------------+------------+")
+        print(f"| {task[0]:<{max_id_length}} | {task[1]:<{max_desc_length}} | {task[2]:<{max_etiquette_length}} |")
+
+    # Imprimer la ligne de fin de tableau
+    print(f"+{'-' * (max_id_length + 2)}+{'-' * (max_desc_length + 2)}+{'-' * (max_etiquette_length + 2)}+")
+
+
 
 
 def get_id(nom_fichier) :
