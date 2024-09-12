@@ -1,6 +1,66 @@
 import argparse
 
-def add(nom_fichier, description, etiquette= "-"):
+def add_etiq(nom_fichier, id, nouvelles_etiquettes):
+    """
+    Ajoute une ou plusieurs étiquettes à une tâche existante.
+    """
+    tasks = read(nom_fichier)
+    found = False
+    with open(nom_fichier, 'w') as f:
+        for task in tasks:
+            if task[0] == id:
+                # Ajout des nouvelles étiquettes à la liste actuelle, en évitant les doublons
+                etiquettes_actuelles = task[2].split(",")
+                etiquettes_a_ajouter = [e.strip() for e in nouvelles_etiquettes.split(",") if e.strip()]
+                etiquettes_finales = list(set(etiquettes_actuelles + etiquettes_a_ajouter))
+                f.write(f"{id},{task[1]},{','.join(etiquettes_finales)}\n")
+                found = True
+            else:
+                f.write(f"{task[0]},{task[1]},{task[2]}\n")
+    if not found:
+        print(f"Erreur : tâche {id} non trouvée.")
+
+
+def rm_etiq(nom_fichier, id, etiquettes_a_supprimer):
+    """
+    Supprime une ou plusieurs étiquettes d'une tâche existante.
+    """
+    tasks = read(nom_fichier)
+    found = False
+    with open(nom_fichier, 'w') as f:
+        for task in tasks:
+            if task[0] == id:
+                etiquettes_actuelles = task[2].split(",")
+                etiquettes_finales = [e for e in etiquettes_actuelles if e not in etiquettes_a_supprimer.split(",")]
+                f.write(f"{id},{task[1]},{','.join(etiquettes_finales)}\n")
+                found = True
+            else:
+                f.write(f"{task[0]},{task[1]},{task[2]}\n")
+    if not found:
+        print(f"Erreur : tâche {id} non trouvée.")
+
+
+def modif_etiq(nom_fichier, id, ancienne_etiquette, nouvelle_etiquette):
+    """
+    Remplace une étiquette spécifique par une nouvelle étiquette.
+    """
+    tasks = read(nom_fichier)
+    found = False
+    with open(nom_fichier, 'w') as f:
+        for task in tasks:
+            if task[0] == id:
+                etiquettes_actuelles = task[2].split(",")
+                etiquettes_finales = [nouvelle_etiquette if e == ancienne_etiquette else e for e in etiquettes_actuelles]
+                f.write(f"{id},{task[1]},{','.join(etiquettes_finales)}\n")
+                found = True
+            else:
+                f.write(f"{task[0]},{task[1]},{task[2]}\n")
+    if not found:
+        print(f"Erreur : tâche {id} non trouvée.")
+
+
+
+def add(nom_fichier, description, etiquette):
     """
     Ajoute au fichier nom_fichier la description de la tâche et l'étiquette. 
     Si la description ou l'étiquette est vide, elles sont remplacées par "-".
@@ -92,9 +152,19 @@ parser_add.add_argument('nom_fichier', help="Nom du fichier")
 parser_add.add_argument('description', help="Description")
 parser_add.add_argument('etiquette', nargs='?', default='-', help="Étiquette (optionnelle)")
 
+parser_add_etiq = subparsers.add_parser('add_etiq', help="Ajouter une ou plusieurs étiquettes")
+parser_add_etiq.add_argument('nom_fichier', help="Nom du fichier")
+parser_add_etiq.add_argument('id', help="Id de la tâche")
+parser_add_etiq.add_argument('nouvelles_etiquettes', help="Étiquettes à ajouter (séparées par des virgules)")
+
 parser_rm = subparsers.add_parser('rm', help="Retirer une tâche")
 parser_rm.add_argument('nom_fichier', help="Nom du fichier")
 parser_rm.add_argument('id', help="Id à retirer")
+
+parser_rm_etiq = subparsers.add_parser('rm_etiq', help="Retirer une ou plusieurs étiquettes")
+parser_rm_etiq.add_argument('nom_fichier', help="Nom du fichier")
+parser_rm_etiq.add_argument('id', help="Id de la tâche")
+parser_rm_etiq.add_argument('etiquettes_a_supprimer', help="Étiquettes à supprimer (séparées par des virgules)")
 
 parser_modify = subparsers.add_parser('modify', help="Modifier la tâche")
 parser_modify.add_argument('nom_fichier', help="Nom du fichier")
@@ -102,19 +172,42 @@ parser_modify.add_argument('id', help="Id")
 parser_modify.add_argument('nouvelle_desc', help="Description à modifier")
 parser_modify.add_argument('nouvelle_etiquette', help="Étiquette à modifier")
 
+parser_modif_etiq = subparsers.add_parser('modif_etiq', help="Modifier une étiquette spécifique")
+parser_modif_etiq.add_argument('nom_fichier', help="Nom du fichier")
+parser_modif_etiq.add_argument('id', help="Id de la tâche")
+parser_modif_etiq.add_argument('ancienne_etiquette', help="Étiquette à modifier")
+parser_modif_etiq.add_argument('nouvelle_etiquette', help="Nouvelle étiquette")
+
 parser_show = subparsers.add_parser('show', help="Montrer les tâches")
 parser_show.add_argument('nom_fichier', help="Nom du fichier")
 
-args= parser.parse_args()
+args = parser.parse_args()
 if args.command == 'add':
-     add(args.nom_fichier, args.description, args.etiquette)
-     # python3 task.py add lestaches.txt "Faire la vaisselle" "Maison"
+    add(args.nom_fichier, args.description, args.etiquette)
+    # python3 task.py add lestaches.txt "Faire la vaisselle" "Maison"
 elif args.command == 'modify':
-     modify(args.nom_fichier, args.id, args.nouvelle_desc, args.nouvelle_etiquette)
-     #python3 task.py modify lestaches.txt 3 "Faire le ménage" "Pro"
+    modify(args.nom_fichier, args.id, args.nouvelle_desc, args.nouvelle_etiquette)
+    # python3 task.py modify lestaches.txt 3 "Faire le ménage" "Pro"
 elif args.command == 'rm':
-     rm(args.nom_fichier, args.id)
-     #python3 task.py rm lestaches.txt 3
+    rm(args.nom_fichier, args.id)
+    # python3 task.py rm lestaches.txt 3
 elif args.command == 'show':
     show(args.nom_fichier)
-    #python3 task.py show lestaches.txt
+    # python3 task.py show lestaches.txt
+elif args.command == 'add_etiq':
+    add_etiq(args.nom_fichier, args.id, args.nouvelles_etiquettes)
+    # python3 task.py add_etiq lestaches.txt 3 "Travail,Maison"
+elif args.command == 'rm_etiq':
+    rm_etiq(args.nom_fichier, args.id, args.etiquettes_a_supprimer)
+    # python3 task.py rm_etiq lestaches.txt 3 "Travail"
+elif args.command == 'modif_etiq':
+    modif_etiq(args.nom_fichier, args.id, args.ancienne_etiquette, args.nouvelle_etiquette)
+    # python3 task.py modif_etiq lestaches.txt 3 "Maison" "Pro"
+else:
+    parser.print_help()
+
+
+
+
+
+
