@@ -187,7 +187,7 @@ parser_modify = subparsers.add_parser('modify', help="Modifier la tâche")
 parser_modify.add_argument('nom_fichier', help="Nom du fichier")
 parser_modify.add_argument('id', help="Id")
 parser_modify.add_argument('nouvelle_desc', help="Description à modifier")
-parser_modify.add_argument('nouvelle_etiquette', help="Étiquette à modifier")
+parser_modify.add_argument('nouvelle_etiquette', nargs= '?', help="Étiquette à modifier")
 
 parser_modif_etiq = subparsers.add_parser('modif_etiq', help="Modifier une étiquette spécifique")
 parser_modif_etiq.add_argument('nom_fichier', help="Nom du fichier")
