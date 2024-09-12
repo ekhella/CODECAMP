@@ -18,7 +18,7 @@ def modify(nom_fichier, id, nouvelle_description, nouvelle_etiquette):
                 f.write(f"{id},{nouvelle_description},{nouvelle_etiquette}\n")
                 found = True
             else:
-                f.write(f"{task[0]},{task[1]}\n")
+                f.write(f"{task[0]},{task[1]},{task[2]} \n")
     if not found:
         print(f"Erreur : tâche {id} non trouvée.")
 
@@ -28,7 +28,7 @@ def rm(nom_fichier, id):
     tasks = [(int(task[0])-1 if task [0]> id else task[0], task[1], task[2]) for task in tasks]
     with open(nom_fichier, 'w') as f:
         for task in tasks:
-            f.write(f"{task[0]},{task[1]}\n")
+            f.write(f"{task[0]},{task[1]},{task[2]} \n")
     return tasks
 
 def show(nom_fichier):

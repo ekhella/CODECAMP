@@ -1,4 +1,3 @@
-1,Faire la vaisselle
-2,Faire la vaisselle
+1,Faire la vaisselle, Maison 
+2,Faire la vaisselle, Maison 
 3,Faire le ménage,Pro
-4,Faire la vaisselle
