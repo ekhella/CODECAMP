@@ -9,12 +9,13 @@ def add_etiq(nom_fichier, id, nouvelles_etiquettes):
     with open(nom_fichier, 'w') as f:
         for task in tasks:
             if task[0] == id:
-                # Ajout des nouvelles étiquettes à la liste actuelle, en évitant les doublons
-                etiquettes_actuelles = task[2].split(",")
-                etiquettes_a_ajouter = [e.strip() for e in nouvelles_etiquettes.split(",") if e.strip()]
+                    # Ajout des nouvelles étiquettes à la liste actuelle, en évitant les doublons
+                etiquettes_actuelles = task[2].split("/")
+                etiquettes_a_ajouter = [e.strip() for e in nouvelles_etiquettes.split("/") if e.strip()]
                 etiquettes_finales = list(set(etiquettes_actuelles + etiquettes_a_ajouter))
-                f.write(f"{id},{task[1]},{','.join(etiquettes_finales)}\n")
+                f.write(f"{id},{task[1]},{'/'.join(etiquettes_finales)}\n")
                 found = True
+                
             else:
                 f.write(f"{task[0]},{task[1]},{task[2]}\n")
     if not found:
@@ -30,9 +31,9 @@ def rm_etiq(nom_fichier, id, etiquettes_a_supprimer):
     with open(nom_fichier, 'w') as f:
         for task in tasks:
             if task[0] == id:
-                etiquettes_actuelles = task[2].split(",")
-                etiquettes_finales = [e for e in etiquettes_actuelles if e not in etiquettes_a_supprimer.split(",")]
-                f.write(f"{id},{task[1]},{','.join(etiquettes_finales)}\n")
+                etiquettes_actuelles = task[2].split("/")
+                etiquettes_finales = [e for e in etiquettes_actuelles if e not in etiquettes_a_supprimer.split("/")]
+                f.write(f"{id},{task[1]},{'/'.join(etiquettes_finales)}\n")
                 found = True
             else:
                 f.write(f"{task[0]},{task[1]},{task[2]}\n")
@@ -49,9 +50,9 @@ def modif_etiq(nom_fichier, id, ancienne_etiquette, nouvelle_etiquette):
     with open(nom_fichier, 'w') as f:
         for task in tasks:
             if task[0] == id:
-                etiquettes_actuelles = task[2].split(",")
+                etiquettes_actuelles = task[2].split("/")
                 etiquettes_finales = [nouvelle_etiquette if e == ancienne_etiquette else e for e in etiquettes_actuelles]
-                f.write(f"{id},{task[1]},{','.join(etiquettes_finales)}\n")
+                f.write(f"{id},{task[1]},{'/'.join(etiquettes_finales)}\n")
                 found = True
             else:
                 f.write(f"{task[0]},{task[1]},{task[2]}\n")
@@ -150,12 +151,12 @@ subparsers = parser.add_subparsers(dest='command')
 parser_add = subparsers.add_parser('add', help="Ajouter une tâche")
 parser_add.add_argument('nom_fichier', help="Nom du fichier")
 parser_add.add_argument('description', help="Description")
-parser_add.add_argument('etiquette', nargs='?', default='-', help="Étiquette (optionnelle)")
+parser_add.add_argument('etiquette', nargs='?', default='', help="Étiquette (optionnelle)")
 
 parser_add_etiq = subparsers.add_parser('add_etiq', help="Ajouter une ou plusieurs étiquettes")
 parser_add_etiq.add_argument('nom_fichier', help="Nom du fichier")
 parser_add_etiq.add_argument('id', help="Id de la tâche")
-parser_add_etiq.add_argument('nouvelles_etiquettes', help="Étiquettes à ajouter (séparées par des virgules)")
+parser_add_etiq.add_argument('nouvelles_etiquettes', help="Étiquettes à ajouter (séparées par des slashs)")
 
 parser_rm = subparsers.add_parser('rm', help="Retirer une tâche")
 parser_rm.add_argument('nom_fichier', help="Nom du fichier")
@@ -164,7 +165,7 @@ parser_rm.add_argument('id', help="Id à retirer")
 parser_rm_etiq = subparsers.add_parser('rm_etiq', help="Retirer une ou plusieurs étiquettes")
 parser_rm_etiq.add_argument('nom_fichier', help="Nom du fichier")
 parser_rm_etiq.add_argument('id', help="Id de la tâche")
-parser_rm_etiq.add_argument('etiquettes_a_supprimer', help="Étiquettes à supprimer (séparées par des virgules)")
+parser_rm_etiq.add_argument('etiquettes_a_supprimer', help="Étiquettes à supprimer (séparées par des slashs)")
 
 parser_modify = subparsers.add_parser('modify', help="Modifier la tâche")
 parser_modify.add_argument('nom_fichier', help="Nom du fichier")
