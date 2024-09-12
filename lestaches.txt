@@ -1,9 +1,2 @@
-1,Faire la vaisselle, Maison
-2,Faire la vaisselle, Maison
-3,Faire le ménage,Pro/Travail/Famille
-4,Je n'ai vraiment pas envie d'écrire une description mais je suis obligé,danger
-5, ,
-6,test,-/Famille
-7,test,-/Famille
-8,Faire la vaisselle,Maison
-9,Faire la vaisselle,
+1,Faire la vaisselle,
+2,Faire le ménage,Travail/Famille/Pro
