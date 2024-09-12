@@ -1,13 +1,20 @@
 import argparse
 
-def add(nom_fichier, description, etiquette):
+def add(nom_fichier, description, etiquette= "-"):
     """
-    Ajoute au fichier nom_fichier la description de la tâche, retourne son identifiant ;
+    Ajoute au fichier nom_fichier la description de la tâche et l'étiquette. 
+    Si la description ou l'étiquette est vide, elles sont remplacées par "-".
     """
+    
+    # Récupérer un nouvel id
     id = get_id(nom_fichier)
+
+    # Ajouter la nouvelle tâche au fichier
     with open(nom_fichier, 'a') as f:
-        f.write(f"{id},{description}, {etiquette}\n")
+        f.write(f"{id},{description},{etiquette}\n")
+
     return id
+
 
 def modify(nom_fichier, id, nouvelle_description, nouvelle_etiquette):
     tasks= read(nom_fichier)
@@ -83,7 +90,7 @@ subparsers = parser.add_subparsers(dest='command')
 parser_add = subparsers.add_parser('add', help="Ajouter une tâche")
 parser_add.add_argument('nom_fichier', help="Nom du fichier")
 parser_add.add_argument('description', help="Description")
-parser_add.add_argument('etiquette', help="Étiquette")
+parser_add.add_argument('etiquette', nargs='?', default='-', help="Étiquette (optionnelle)")
 
 parser_rm = subparsers.add_parser('rm', help="Retirer une tâche")
 parser_rm.add_argument('nom_fichier', help="Nom du fichier")
