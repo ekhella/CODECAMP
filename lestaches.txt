@@ -1,6 +1,6 @@
 1,Rediger le rapport trimestriel,Finance/Reporting,none,a faire
 2,Mettre a jour le site web,Marketing/Design,none,en cours
-3,Preparer la presentation pour la reunion,Management/Communication,1/4,en cours
+3,Preparer la presentation pour la reunion,Management/Communication,1,en cours
 4,Analyser les donnees clients,Data/Business Intelligence,none,a faire
 5,Organiser un evenement client,Relations publiques/Marketing,3/2,en cours
 6,Developper la nouvelle fonctionnalite de l'application,IT/DevOps/Innovation,2,en cours

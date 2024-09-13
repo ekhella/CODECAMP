@@ -197,9 +197,10 @@ def modif_etat(nom_fichier, id, nouvel_etat):
                 file.write(ligne)
 
         print(f"Tâche {id} mise à jour avec le statut : {nouvel_etat}")
-
+    
     except Exception as e:
         print(f"Erreur : {e}")
+    log_action('Modif etat', nom_fichier, f" Nouvel etat de la tache: {id}, {nouvel_etat}")
 
 
 def add_dep(nom_fichier, id, dependance):
@@ -220,6 +221,7 @@ def add_dep(nom_fichier, id, dependance):
                 ligne = ','.join(colonnes) + '\n'
             file.write(ligne)
     print(f"Dependance(s) {dependance} ajoutee(s) à la tache {id}")
+    log_action('Ajout dependance', nom_fichier, f" La tache: {id}, depend desormais de la tache {dependance}")
 
 def rm_dep(nom_fichier, id, dependance):
     """
@@ -239,6 +241,7 @@ def rm_dep(nom_fichier, id, dependance):
                 ligne = ','.join(colonnes) + '\n'
             file.write(ligne)
     print(f"Dependance(s) {dependance} supprimee(s) de la tache {id}")
+    log_action('Suppression dependance', nom_fichier, f" La tache: {id}, n'a plus la dependance {dependance} dans sa liste de dependances")
 
 
 
