@@ -79,17 +79,17 @@ def modif_etiq(nom_fichier, id, ancienne_etiquette, nouvelle_etiquette):
 
 
 
-def add(nom_fichier, description, etiquette, dependencies=None, state='a faire'):
+def add(nom_fichier, description, etiquette, dependance=None, state='a faire'):
     """
     Ajoute une nouvelle tache avec ses dependances (optionnelles) et son etat initial.
     """
     id = get_id(nom_fichier)
-    dependencies = dependencies or 'none'
+    dependance = dependance or 'none'
     
     with open(nom_fichier, 'a') as f:
-        f.write(f"{id},{description},{etiquette},{dependencies},{state}\n")
+        f.write(f"{id},{description},{etiquette},{dependance},{state}\n")
 
-    log_action('add', nom_fichier, f"Tache ajoutee: {id}, {description}, {etiquette}, Dependances: {dependencies}, etat: {state}")
+    log_action('add', nom_fichier, f"Tache ajoutee: {id}, {description}, {etiquette}, Dependances: {dependance}, etat: {state}")
     return id
 
     
@@ -119,7 +119,7 @@ def update_task_state(nom_fichier, id, new_state):
     with open(nom_fichier, 'w') as f:
         for task in tasks:
             if task[0] == id:
-                if new_state == 'in progress' and not are_dependencies_completed(tasks, task):
+                if new_state == 'in progress' and not are_dependance_completed(tasks, task):
                     print(f"Erreur : Les dependances de la tache {id} ne sont pas encore terminees.")
                     f.write(f"{task[0]},{task[1]},{task[2]},{task[3]},{task[4]}\n")  # ecrire sans modification
                     continue
@@ -137,12 +137,12 @@ def update_task_state(nom_fichier, id, new_state):
         print(f"Erreur : tache {id} non trouvee.")
     log_action('update', nom_fichier, f"etat de la tache mis à jour: {id}, {new_state}")
 
-def are_dependencies_completed(tasks, task):
+def are_dependance_completed(tasks, task):
     """
     Verifie si les taches dont depend la tache courante sont terminees.
     """
-    dependencies = task[3].split('/') if task[3] != 'none' else []
-    for dep_id in dependencies:
+    dependance = task[3].split('/') if task[3] != 'none' else []
+    for dep_id in dependance:
         dep_task = next((t for t in tasks if t[0] == dep_id), None)
         if dep_task and dep_task[4] != 'completed':
             return False
@@ -202,7 +202,7 @@ def modif_etat(nom_fichier, id, nouvel_etat):
         print(f"Erreur : {e}")
 
 
-def add_dependency(nom_fichier, id, dependencies):
+def add_dependency(nom_fichier, id, dependance):
     """
     Ajoute une ou plusieurs dependances à une tache specifiee.
     """
@@ -214,14 +214,14 @@ def add_dependency(nom_fichier, id, dependencies):
             colonnes = ligne.strip().split(',')
             if colonnes[0] == str(id):
                 if colonnes[3] == 'none':
-                    colonnes[3] = dependencies
+                    colonnes[3] = dependance
                 else:
-                    colonnes[3] += '/' + dependencies  # Ajout de nouvelles dependances
+                    colonnes[3] += '/' + dependance  # Ajout de nouvelles dependances
                 ligne = ','.join(colonnes) + '\n'
             file.write(ligne)
-    print(f"Dependance(s) {dependencies} ajoutee(s) à la tache {id}")
+    print(f"Dependance(s) {dependance} ajoutee(s) à la tache {id}")
 
-def remove_dependency(nom_fichier, id, dependencies):
+def remove_dependency(nom_fichier, id, dependance):
     """
     Supprime une ou plusieurs dependances d'une tache specifiee.
     """
@@ -234,11 +234,11 @@ def remove_dependency(nom_fichier, id, dependencies):
             if colonnes[0] == str(id):
                 if colonnes[3] != 'none':
                     dep_list = colonnes[3].split('/')
-                    dep_to_remove = dependencies.split('/')
+                    dep_to_remove = dependance.split('/')
                     colonnes[3] = '/'.join([dep for dep in dep_list if dep not in dep_to_remove]) or 'none'
                 ligne = ','.join(colonnes) + '\n'
             file.write(ligne)
-    print(f"Dependance(s) {dependencies} supprimee(s) de la tache {id}")
+    print(f"Dependance(s) {dependance} supprimee(s) de la tache {id}")
 
 
 
@@ -250,10 +250,10 @@ def rm(nom_fichier, id):
     
     # Check and update dependent tasks
     for task in tasks:
-        dependencies = task[3].split('/') if task[3] != 'none' else []
-        if id in dependencies:
-            dependencies.remove(id)
-            task[3] = '/'.join(dependencies) if dependencies else 'none'
+        dependance = task[3].split('/') if task[3] != 'none' else []
+        if id in dependance:
+            dependance.remove(id)
+            task[3] = '/'.join(dependance) if dependance else 'none'
             tasks_to_update.append(task)
 
     tasks = [task for task in tasks if task[0] != id]
@@ -332,13 +332,13 @@ parser_add.add_argument('etiquette', nargs='?', default='', help="etiquette (opt
 parser_add = subparsers.add_parser('add_dep', help="Ajouter une dependance")
 parser_add.add_argument('nom_fichier', help="Nom du fichier")
 parser_add.add_argument('id', help="Id de la tache")
-parser_add.add_argument('dependance', nargs='?', default='none', help="depende de la tache numero (id) (optionnelle)")
+parser_add.add_argument('dependance', help="depende de la tache numero (id) (optionnelle)")
 
 #Retirer une dependance
-parser_rm_dep = subparsers.add_parser('rm_dep', help="Retirer une ou plusieurs dependances")
+parser_rm_dep = subparsers.add_parser('rm_dep', help="Retire une dependance")
 parser_rm_dep.add_argument('nom_fichier', help="Nom du fichier")
 parser_rm_dep.add_argument('id', help="Id de la tache")
-parser_rm_dep.add_argument('etiquettes_a_supprimer', help="etiquettes à supprimer (separees par des slashs)")
+parser_rm_dep.add_argument('dependance', help="dependance à supprimer")
 
 # Modifier un état de tache
 parser_modif_statut = subparsers.add_parser('modif_etat', help="Modifier un état de tâche")
@@ -415,11 +415,11 @@ elif args.command == 'modif_etat':
     # Exemple à taper en ligne de commande :
     # python3 task.py modif_statut lestaches.txt 3 "in progress"
 elif args.command == 'add_dep':
-    add_dependency(args.nom_fichier, args.id, args.dependencies)
+    add_dependency(args.nom_fichier, args.id, args.dependance)
     # Exemple à taper en ligne de commande :
     # python3 task.py add_dep lestaches.txt 3 "1/2"
 elif args.command == 'rm_dep':
-    remove_dependency(args.nom_fichier, args.id, args.dependencies)
+    remove_dependency(args.nom_fichier, args.id, args.dependance)
     # Exemple à taper en ligne de commande :
     # python3 task.py rm_dep lestaches.txt 3 "1"
 else:
