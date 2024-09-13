@@ -202,7 +202,7 @@ def modif_etat(nom_fichier, id, nouvel_etat):
         print(f"Erreur : {e}")
 
 
-def add_dependency(nom_fichier, id, dependance):
+def add_dep(nom_fichier, id, dependance):
     """
     Ajoute une ou plusieurs dependances à une tache specifiee.
     """
@@ -221,7 +221,7 @@ def add_dependency(nom_fichier, id, dependance):
             file.write(ligne)
     print(f"Dependance(s) {dependance} ajoutee(s) à la tache {id}")
 
-def remove_dependency(nom_fichier, id, dependance):
+def rm_dep(nom_fichier, id, dependance):
     """
     Supprime une ou plusieurs dependances d'une tache specifiee.
     """
@@ -415,11 +415,11 @@ elif args.command == 'modif_etat':
     # Exemple à taper en ligne de commande :
     # python3 task.py modif_statut lestaches.txt 3 "in progress"
 elif args.command == 'add_dep':
-    add_dependency(args.nom_fichier, args.id, args.dependance)
+    add_dep(args.nom_fichier, args.id, args.dependance)
     # Exemple à taper en ligne de commande :
     # python3 task.py add_dep lestaches.txt 3 "1/2"
 elif args.command == 'rm_dep':
-    remove_dependency(args.nom_fichier, args.id, args.dependance)
+    rm_dep(args.nom_fichier, args.id, args.dependance)
     # Exemple à taper en ligne de commande :
     # python3 task.py rm_dep lestaches.txt 3 "1"
 else:

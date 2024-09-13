@@ -6,3 +6,4 @@
 [2024-09-13 11:21:50] Action: show | Fichier: lestaches.txt | Details: Affichage des taches avec dependances et etat
 [2024-09-13 11:23:26] Action: show | Fichier: lestaches.txt | Details: Affichage des taches avec dependances et etat
 [2024-09-13 11:31:18] Action: show | Fichier: lestaches.txt | Details: Affichage des taches avec dependances et etat
+[2024-09-13 11:31:56] Action: show | Fichier: lestaches.txt | Details: Affichage des taches avec dependances et etat
