@@ -151,19 +151,56 @@ def are_dependencies_completed(tasks, task):
 
 def modif_etat(nom_fichier, id, nouvel_etat):
     """
-    Met à jour le statut d'une tache specifiee.
+    Met à jour le statut d'une tâche spécifiée, en vérifiant si les dépendances sont terminées
+    avant de la passer à "en cours" ou tout autre statut.
     """
-    with open(nom_fichier, 'r') as file:
-        lignes = file.readlines()
-    
-    with open(nom_fichier, 'w') as file:
+    try:
+        # Lire toutes les lignes du fichier
+        with open(nom_fichier, 'r') as file:
+            lignes = file.readlines()
+
+        # Trouver la tâche actuelle et ses dépendances
+        tache_trouvee = False
+        dependances = []
+        statut_dependances_valide = True
+        
         for ligne in lignes:
             colonnes = ligne.strip().split(',')
-            if colonnes[0] == str(id):
-                colonnes[4] = nouvel_etat  # Colonne du statut
-                ligne = ','.join(colonnes) + '\n'
-            file.write(ligne)
-    print(f"Tache {id} mise à jour avec le statut : {nouvel_etat}")
+            if colonnes[0] == str(id):  # Identification de la tâche
+                tache_trouvee = True
+                dependances = colonnes[3].split('/') if colonnes[3] != 'none' else []
+                
+                # Vérification des dépendances seulement si on veut passer la tâche à "en cours"
+                if nouvel_etat == "in progress":
+                    for dep_id in dependances:
+                        for ligne_dep in lignes:
+                            colonnes_dep = ligne_dep.strip().split(',')
+                            if colonnes_dep[0] == dep_id and colonnes_dep[4] != "completed":
+                                statut_dependances_valide = False
+                                print(f"Tâche {id} ne peut pas être mise à jour car la dépendance {dep_id} n'est pas terminée.")
+                                break
+
+                    # Si une dépendance n'est pas terminée, on sort de la boucle
+                    if not statut_dependances_valide:
+                        raise Exception(f"Toutes les dépendances de la tâche {id} doivent être complétées avant de passer la tâche à 'in progress'.")
+
+        if not tache_trouvee:
+            raise Exception(f"Tâche {id} introuvable dans {nom_fichier}.")
+
+        # Si toutes les dépendances sont terminées, on met à jour l'état de la tâche
+        with open(nom_fichier, 'w') as file:
+            for ligne in lignes:
+                colonnes = ligne.strip().split(',')
+                if colonnes[0] == str(id):
+                    colonnes[4] = nouvel_etat  # Mise à jour du statut
+                    ligne = ','.join(colonnes) + '\n'
+                file.write(ligne)
+
+        print(f"Tâche {id} mise à jour avec le statut : {nouvel_etat}")
+
+    except Exception as e:
+        print(f"Erreur : {e}")
+
 
 def add_dependency(nom_fichier, id, dependencies):
     """
