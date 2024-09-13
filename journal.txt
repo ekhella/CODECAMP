@@ -1,2 +1,5 @@
 [2024-09-12 12:08:10] Action: add | Fichier: lestaches.txt | Détails: Show tableau
 [2024-09-12 12:08:48] Action: add | Fichier: lestaches.txt | Détails: Tâche ajoutée: 3, Test, 
+[2024-09-13 10:58:46] Action: show | Fichier: lestaches.txt | Détails: Affichage des tâches avec dépendances et état
+[2024-09-13 11:02:38] Action: show | Fichier: lestaches.txt | Details: Affichage des taches avec dependances et etat
+[2024-09-13 11:15:02] Action: show | Fichier: lestaches.txt | Details: Affichage des taches avec dependances et etat

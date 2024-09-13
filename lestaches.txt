@@ -1,3 +1,6 @@
-1,Faire la vaisselle,
-2,Faire le ménage,Travail/Famille/Pro
-3,Test,
+1,Rédiger le rapport trimestriel,Finance/Reporting,none,a faire
+2,Mettre à jour le site web,Marketing/Design,none,en cours
+3,Préparer la présentation pour la réunion,Management/Communication,1,en cours
+4,Analyser les données clients,Data/Business Intelligence,none,a faire
+5,Organiser un événement client,Relations publiques/Marketing,3/2,en cours
+6,Développer la nouvelle fonctionnalité de l'application,IT/DevOps/Innovation,2,en cours
