@@ -171,18 +171,18 @@ def modif_etat(nom_fichier, id, nouvel_etat):
                 dependances = colonnes[3].split('/') if colonnes[3] != 'none' else []
                 
                 # Vérification des dépendances seulement si on veut passer la tâche à "en cours"
-                if nouvel_etat == "in progress":
+                if nouvel_etat == "en cours":
                     for dep_id in dependances:
                         for ligne_dep in lignes:
                             colonnes_dep = ligne_dep.strip().split(',')
-                            if colonnes_dep[0] == dep_id and colonnes_dep[4] != "completed":
+                            if colonnes_dep[0] == dep_id and colonnes_dep[4] != "termine":
                                 statut_dependances_valide = False
                                 print(f"Tâche {id} ne peut pas être mise à jour car la dépendance {dep_id} n'est pas terminée.")
                                 break
 
                     # Si une dépendance n'est pas terminée, on sort de la boucle
                     if not statut_dependances_valide:
-                        raise Exception(f"Toutes les dépendances de la tâche {id} doivent être complétées avant de passer la tâche à 'in progress'.")
+                        raise Exception(f"Toutes les dépendances de la tâche {id} doivent être complétées avant de passer la tâche à 'en cours'.")
 
         if not tache_trouvee:
             raise Exception(f"Tâche {id} introuvable dans {nom_fichier}.")
